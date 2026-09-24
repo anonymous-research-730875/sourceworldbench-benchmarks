@@ -1,0 +1,29 @@
+diff --git a/test-requirements.txt b/test-requirements.txt
+index 43ac36b..9032352 100644
+--- a/test-requirements.txt
++++ b/test-requirements.txt
+@@ -1,8 +1,8 @@
+ asv
+ black==19.10b0
+ flake8-mutable==1.2.0
+-flake8==3.8.3
+-isort==5.0.9
++flake8==3.8.2
++isort==4.3.21
+ mypy
+ pytest
+ pytest-cov
+diff --git a/tests/test_regressions.py b/tests/test_regressions.py
+index 7027b2f..e55e9ee 100644
+--- a/tests/test_regressions.py
++++ b/tests/test_regressions.py
+@@ -15,3 +15,9 @@ def test_object_isna():
+     actual = array.isna()
+     expected = np.asarray([False, True])
+     npt.assert_equal(actual, expected)
++
++
++def test_mean_divisor_overflow():
++    # https://github.com/JDASoftwareGroup/rle-array/issues/22
++    array = RLEArray._from_sequence([1] * 256, dtype=np.uint8)
++    assert array.mean() == 1

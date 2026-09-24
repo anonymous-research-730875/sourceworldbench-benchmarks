@@ -1,0 +1,46 @@
+diff --git a/README.md b/README.md
+index d1287b9..96a1ff2 100644
+--- a/README.md
++++ b/README.md
+@@ -2364,7 +2364,7 @@ For simple one-time cases it's recommended to start from using a configurable
+ serialized to json or to dict:
+ 
+ ```python
+-from dataclasses import dataclass
++from dataclasses import dataclass, field
+ from typing import List
+ from uuid import UUID
+ 
+@@ -2374,7 +2374,7 @@ from mashumaro.jsonschema import build_json_schema
+ @dataclass
+ class User:
+     id: UUID
+-    name: str
++    name: str = field(metadata={"description": "User name"})
+ 
+ 
+ print(build_json_schema(List[User]).to_json())
+@@ -2395,7 +2395,8 @@ print(build_json_schema(List[User]).to_json())
+                 "format": "uuid"
+             },
+             "name": {
+-                "type": "string"
++                "type": "string",
++                "description": "User name"
+             }
+         },
+         "additionalProperties": false,
+diff --git a/mashumaro/jsonschema/schema.py b/mashumaro/jsonschema/schema.py
+index 65c3ec3..7779aa6 100644
+--- a/mashumaro/jsonschema/schema.py
++++ b/mashumaro/jsonschema/schema.py
+@@ -306,6 +306,9 @@ def on_dataclass(instance: Instance, ctx: Context) -> Optional[JSONSchema]:
+                 f_name = f_instance.alias
+             if f_default is not MISSING:
+                 f_schema.default = f_default
++            description = f_instance.metadata.get("description")
++            if description:
++                f_schema.description = description
+ 
+             if not has_default:
+                 required.append(f_name)

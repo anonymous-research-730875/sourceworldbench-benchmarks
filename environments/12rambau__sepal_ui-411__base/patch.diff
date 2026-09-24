@@ -1,0 +1,62 @@
+diff --git a/docs/source/modules/sepal_ui.sepalwidgets.DatePicker.rst b/docs/source/modules/sepal_ui.sepalwidgets.DatePicker.rst
+index 1a982afb..867227cb 100644
+--- a/docs/source/modules/sepal_ui.sepalwidgets.DatePicker.rst
++++ b/docs/source/modules/sepal_ui.sepalwidgets.DatePicker.rst
+@@ -8,6 +8,7 @@ sepal\_ui.sepalwidgets.DatePicker
+     .. autosummary::
+     
+         ~DatePicker.menu
++        ~DatePicker.disabled
+         
+     .. rubric:: Methods
+     
+@@ -15,5 +16,8 @@ sepal\_ui.sepalwidgets.DatePicker
+         :nosignatures:
+         
+         ~Datepicker.close_menu
++        ~DatePicker.disable
+         
+-.. automethod:: sepal_ui.sepalwidgets.DatePicker.close_menu
+\ No newline at end of file
++.. automethod:: sepal_ui.sepalwidgets.DatePicker.close_menu
++
++.. automethod:: sepal_ui.sepalwidgets.DatePicker.disable
+\ No newline at end of file
+diff --git a/sepal_ui/sepalwidgets/inputs.py b/sepal_ui/sepalwidgets/inputs.py
+index 3ad7f1a9..68b81746 100644
+--- a/sepal_ui/sepalwidgets/inputs.py
++++ b/sepal_ui/sepalwidgets/inputs.py
+@@ -1,7 +1,7 @@
+ from pathlib import Path
+ 
+ import ipyvuetify as v
+-from traitlets import link, Int, Any, List, observe, Dict, Unicode
++from traitlets import link, Int, Any, List, observe, Dict, Unicode, Bool
+ from ipywidgets import jslink
+ import pandas as pd
+ import ee
+@@ -40,6 +40,9 @@ class DatePicker(v.Layout, SepalWidget):
+     menu = None
+     "v.Menu: the menu widget to display the datepicker"
+ 
++    disabled = Bool(False).tag(sync=True)
++    "traitlets.Bool: the disabled status of the Datepicker object"
++
+     def __init__(self, label="Date", **kwargs):
+ 
+         # create the widgets
+@@ -93,6 +96,14 @@ class DatePicker(v.Layout, SepalWidget):
+ 
+         return
+ 
++    @observe("disabled")
++    def disable(self, change):
++        """A method to disabled the appropriate components in the datipkcer object"""
++
++        self.menu.v_slots[0]["children"].disabled = self.disabled
++
++        return
++
+ 
+ class FileInput(v.Flex, SepalWidget):
+     """

@@ -1,0 +1,76 @@
+[project]
+name = "sourceworldbench-benchmarks"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "anonymous" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "datasets>=4.8.5",
+    "google-cloud-storage>=3.12.0",
+    "huggingface-hub>=1.15.0",
+    "litellm>=1.98.0",
+    "pydantic>=2.13.4",
+    "python-dotenv>=1.0.0",
+    "requests>=2.32.0",
+    "rich>=15.0.0",
+    "typer>=0.25.1",
+]
+
+[project.optional-dependencies]
+swebench = [
+    "swebench>=3.0.0",
+]
+eval = [
+    "anthropic>=0.40.0",
+    "openai>=1.0.0",
+]
+swebench-harness = [
+    "docker>=7.0.0",
+    "swebench>=3.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+augmentations = [
+    "cosmic-ray>=8.4.6",
+    "mutpy-pynguin",
+    "claude-agent-sdk>=0.2.106",
+]
+dev = [
+    "pytest>=9.0.3",
+    "ruff>=0.15.13",
+    "ipykernel>=7.3.0",
+]
+
+[project.scripts]
+sourceworldbench-benchmarks = "sourceworldbench_benchmarks.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sourceworldbench_benchmarks"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+norecursedirs = ["tests/execution_tracer/legacy"]
+markers = [
+    "docker: tests that require a running Docker daemon (slow)",
+]
+filterwarnings = [
+    "ignore::pytest.PytestCollectionWarning",
+]
+
+[tool.uv.sources]
+mutpy-pynguin = { git = "https://github.com/se2p/mutpy-pynguin.git" }

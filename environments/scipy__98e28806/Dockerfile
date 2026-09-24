@@ -1,0 +1,15 @@
+# syntax=docker/dockerfile:1.7
+
+FROM --platform=linux/amd64 ghcr.io/swefficiency/swefficiency-images:scipy__scipy-8558
+
+RUN groupadd --gid 65532 runner \
+    && useradd --create-home --shell /bin/bash --uid 65532 --gid 65532 runner
+
+RUN ln -s /testbed /app
+
+WORKDIR /app
+RUN . /opt/miniconda3/etc/profile.d/conda.sh && conda run -n testbed pip install -e . -q \
+    && mkdir -p /results \
+    && chown -R runner:runner /testbed /results
+
+USER runner

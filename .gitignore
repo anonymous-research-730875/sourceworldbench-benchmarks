@@ -1,0 +1,47 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# IDEs
+.idea
+.vscode
+.cursor
+
+# Virtual environments
+.venv
+
+# Local environment variables (GitHub token, etc.)
+.env
+
+# mac
+*.DS_Store
+
+# Intermediate files for the benchmark
+data/
+!data/cache/
+data/examples/*.jsonl
+data/examples/*.patch
+data/examples/mutpy*
+data/examples/ruff*
+
+# tracing data
+data/traces/**/*.json
+data/traces/**/*.jsonl
+data/traces/*.html
+traces/
+trace/
+
+# sweff cache for augmentations
+data/cache/*
+
+# failures / logs
+failures/
+logs/
+
+# Caches
+.ruff_cache/
+.pytest_cache/
